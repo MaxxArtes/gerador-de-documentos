@@ -95,7 +95,7 @@ with st.form("entrevista_form"):
     submitted = st.form_submit_button("Gerar opções de download")
 
 if submitted:
-    st.success("Formulário preenchido! Escolha o formato para gerar o arquivo:")
+    st.success("Escolha o formato para gerar o arquivo:")
 
     col1, col2, col3 = st.columns(3)
 
