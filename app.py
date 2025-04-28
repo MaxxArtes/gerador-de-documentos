@@ -18,32 +18,44 @@ def gerar_pdf(respostas, nome_arquivo="resumo_entrevista.pdf"):
 
     pdf.output(nome_arquivo)
 
-# --- Interface Streamlit ---
-st.title("📝 Sistema de Entrevista de Dados")
-st.write("Preencha o formulário abaixo para gerar o resumo da entrevista em PDF.")
+# Perguntas padrão
+perguntas_padrao = {
+    'objetivo_principal': "Qual é o objetivo principal deste projeto?",
+    'objetivos_secundarios': "Existem objetivos secundários? Se sim, quais?",
+    'resultados_esperados': "Que entregáveis você espera (relatórios, dashboards, insights)?",
+    'criterios_sucesso': "Como saberemos que o projeto foi bem-sucedido?",
+    'restricoes': "Existem limitações de prazo, orçamento ou recursos?",
+    'publico_alvo': "Quem vai usar os resultados da análise? Qual o nível de familiaridade com dados?",
+    'descricao_problema': "Que problema estamos tentando resolver?",
+    'contexto_problema': "Como esse problema foi identificado e há quanto tempo ele existe?",
+    'impacto_problema': "Qual é o impacto desse problema no negócio/processos/resultados?",
+    'problemas_relacionados': "Este problema está ligado a outras questões conhecidas?",
+    'perguntas_analise': "Que perguntas específicas precisam ser respondidas para resolver o problema?",
+    'metricas_kpis': "Existem KPIs ou métricas específicas a acompanhar?",
+    'fontes_dados': "De onde virão os dados necessários (bancos de dados, planilhas, sistemas)?",
+    'formato_resultados': "Como as respostas devem ser apresentadas (relatório, gráfico, tabela)?"
+}
+
+st.title("📜 Sistema de Entrevista de Dados")
+st.write("Preencha o formulário abaixo para gerar o resumo da entrevista em PDF. Você pode editar as perguntas se quiser.")
 
 respostas = {}
 
 with st.form("entrevista_form"):
     st.subheader("Entendimento das Expectativas")
-    respostas['Objetivo principal'] = st.text_input("Qual é o objetivo principal deste projeto?")
-    respostas['Objetivos secundários'] = st.text_input("Existem objetivos secundários? Se sim, quais?")
-    respostas['Resultados esperados'] = st.text_input("Que entregáveis você espera (relatórios, dashboards, insights)?")
-    respostas['Critérios de sucesso'] = st.text_input("Como saberemos que o projeto foi bem-sucedido?")
-    respostas['Restrições'] = st.text_input("Existem limitações de prazo, orçamento ou recursos?")
-    respostas['Público-alvo'] = st.text_input("Quem vai usar os resultados da análise? Qual o nível de familiaridade com dados?")
+    for key in list(perguntas_padrao.keys())[:6]:
+        pergunta_editada = st.text_input(f"Editar pergunta:", value=perguntas_padrao[key], key=f"edit_{key}")
+        respostas[pergunta_editada] = st.text_input(f"Resposta:", key=f"resposta_{key}")
 
     st.subheader("Definição do Problema")
-    respostas['Descrição do problema'] = st.text_area("Que problema estamos tentando resolver?")
-    respostas['Contexto do problema'] = st.text_area("Como esse problema foi identificado e há quanto tempo ele existe?")
-    respostas['Impacto do problema'] = st.text_area("Qual é o impacto desse problema no negócio/processos/resultados?")
-    respostas['Problemas relacionados'] = st.text_area("Este problema está ligado a outras questões conhecidas?")
+    for key in list(perguntas_padrao.keys())[6:10]:
+        pergunta_editada = st.text_input(f"Editar pergunta:", value=perguntas_padrao[key], key=f"edit_{key}")
+        respostas[pergunta_editada] = st.text_area(f"Resposta:", key=f"resposta_{key}")
 
     st.subheader("Definição das Perguntas de Análise")
-    respostas['Perguntas para análise'] = st.text_area("Que perguntas específicas precisam ser respondidas para resolver o problema?")
-    respostas['Métricas/KPIs'] = st.text_input("Existem KPIs ou métricas específicas a acompanhar?")
-    respostas['Fontes de dados'] = st.text_input("De onde virão os dados necessários (bancos de dados, planilhas, sistemas)?")
-    respostas['Formato dos resultados'] = st.text_input("Como as respostas devem ser apresentadas (relatório, gráfico, tabela)?")
+    for key in list(perguntas_padrao.keys())[10:]:
+        pergunta_editada = st.text_input(f"Editar pergunta:", value=perguntas_padrao[key], key=f"edit_{key}")
+        respostas[pergunta_editada] = st.text_input(f"Resposta:", key=f"resposta_{key}")
 
     submitted = st.form_submit_button("Gerar PDF")
 
@@ -53,4 +65,3 @@ if submitted:
 
     with open("resumo_entrevista.pdf", "rb") as pdf_file:
         st.download_button("📥 Baixar PDF", pdf_file, file_name="resumo_entrevista.pdf")
-
